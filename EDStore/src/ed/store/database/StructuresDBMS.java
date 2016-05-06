@@ -7,7 +7,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.HashMap;
 import java.util.Map;
+
+import javax.naming.NoPermissionException;
 
 import ed.store.database.exceptions.InvalidSystemFileException;
 import ed.store.database.interfaces.Database;
@@ -21,50 +24,26 @@ public class StructuresDBMS implements DatabaseManagementSystem {
 	private Map<String, Database> databases;
 	
 	@SuppressWarnings("unchecked")
-	private StructuresDBMS()
+	private StructuresDBMS() throws NoPermissionException
 	{
-		File system = new File(FILENAME);
-		
-		try
-		{
-			if (system.exists())
-			{
-				FileInputStream fis = new FileInputStream(system);
-				ObjectInputStream ois = new ObjectInputStream(fis);
-				Object obj = ois.readObject();
+		try {
+			this.databases = (Map<String, Database>) FileHandler.read(FILENAME);
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+			
+			this.databases = new HashMap<String, Database>();
+			
+			try {
+				FileHandler.write("system.sdb", this.databases);
+			} catch (IOException e2) {
+				e2.printStackTrace();
 				
-				if (obj instanceof Map<?, ?>)
-					this.databases = (Map<String, Database>) obj;
-				else
-				{
-					fis.close();
-					throw new InvalidSystemFileException("system.sdb is invalid");
-				}
-				
-				fis.close();
+				throw new NoPermissionException();
 			}
-			else
-			{
-				FileOutputStream fos = new FileOutputStream(system);
-				ObjectOutputStream oos = new ObjectOutputStream(fos);
-				
-				oos.writeObject(this.databases);
-				
-				fos.close();
-			}
-		}
-		catch (FileNotFoundException fnfe) {
-			fnfe.printStackTrace();
-		}
-		catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-		catch (ClassNotFoundException cnfe) {
-			cnfe.printStackTrace();
 		}
 	}
 	
-	public StructuresDBMS instanciate()
+	public StructuresDBMS instanciate() throws NoPermissionException
 	{
 		if (instance == null)
 			instance = new StructuresDBMS();
@@ -75,25 +54,30 @@ public class StructuresDBMS implements DatabaseManagementSystem {
 	@Override
 	public Database create(String name)
 	{
+		Database db = new StructuresDatabase(name);
+		this.databases.add(db);
+		return db;
+	}
+
+	@Override
+	public void load(String name) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void drop(String name) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void dropAll() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void delete() {
+		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public Database load(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Database drop(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Database dropAll() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 }
