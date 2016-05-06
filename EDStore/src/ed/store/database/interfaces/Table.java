@@ -4,9 +4,9 @@ public interface Table {
 
 	public boolean wasModified();
 
-	public <T> void addColumn(String name, T default);
-	public <T> void addColumn(String name, T default, T[] type);
-	public <T> void addColumn(String name, T default, T[] type, ColumnValidator<T> validator);
+	public <T> void addColumn(String name, T defaultValue);
+	public <T> void addColumn(String name, T defaultValue, T[] type);
+	public <T> void addColumn(String name, T defaultValue, T[] type, ColumnValidator<T> validator);
 
 	/* Insere uma linha na tabela.
 	 * @param data - dados no formato: [ nome_da_coluna_1, valor_1,

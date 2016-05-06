@@ -1,4 +1,4 @@
-package ed.store.database;
+package ed.store.database.interfaces;
 
 public interface Relation<T> {
 

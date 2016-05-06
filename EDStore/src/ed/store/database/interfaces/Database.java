@@ -1,5 +1,7 @@
 package ed.store.database.interfaces;
 
+import ed.store.database.Structures;
+
 public interface Database {
 
 	public Struct<Object> create(Structures struct, String name);
