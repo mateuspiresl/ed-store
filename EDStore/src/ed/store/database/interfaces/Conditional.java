@@ -1,6 +1,6 @@
 package ed.store.database.interfaces;
 
-public interface Condition<T> {
+public interface Conditional<T> {
 
 	public boolean check(T data);
 

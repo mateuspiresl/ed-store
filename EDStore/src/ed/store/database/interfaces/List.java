@@ -23,7 +23,7 @@ public interface List<T> extends Struct<T> {
 
 	public T get(int index);
 
-	/* �?ndice do primeiro elemento de valor data dentro de
+	/* Índice do primeiro elemento de valor data dentro de
 	 *		um intervalo.
 	 * @param data - valor do elemento.
 	 * @param offset - primeira posição verificada.
@@ -31,7 +31,7 @@ public interface List<T> extends Struct<T> {
 	 * @return - índice. */
 	public int indexOf(T data, int offset, int limit);
 	public int[] indexOfAll(T data);
-	/* �?ndices de todos os elementos de valor data dentro de
+	/* Índices de todos os elementos de valor data dentro de
 	 *		um intervalo.
 	 * @param data - valor do elemento.
 	 * @param offset - primeira posição verificada.

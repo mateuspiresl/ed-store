@@ -1,4 +1,4 @@
-package ed.store.database;
+package ed.store.database.enums;
 
 public enum Conditions {
 

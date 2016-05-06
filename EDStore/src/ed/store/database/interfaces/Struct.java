@@ -1,9 +1,9 @@
 package ed.store.database.interfaces;
 
-public interface Struct<T> {
+public interface Struct<T> extends Modifiable {
 	
-	/* Verifica se a estrutura foi modificada. */
-	public void wasModified();
+	@Override
+	public boolean wasModified();
 
 	public int size();
 	public boolean isEmpty();
