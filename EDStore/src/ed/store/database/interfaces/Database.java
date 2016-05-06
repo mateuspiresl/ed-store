@@ -5,6 +5,8 @@ public interface Database {
 	public Struct<Object> create(Structures struct, String name);
 	public <T> Struct<T> create(Structures struct, String name, T[] type);
 
+	public Table createTable(String name);
+
 	public Struct<Object> pull(String name);
 	public <T> Struct<T> pull(String name, T[] type);
 
