@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileHandler {
 
@@ -38,13 +40,15 @@ public class FileHandler {
 		}
 	}
 	
-	public static Object readAll(String name) throws IOException, ClassNotFoundException
+	public static Object[] readAll(String name) throws IOException, ClassNotFoundException
 	{
 		FileInputStream fis = new FileInputStream(name);
+		List<Object> objects = new ArrayList<Object>();
 		
 		try {
 			ObjectInputStream ois = new ObjectInputStream(fis);
-			return ois.readObject();
+			objects.add(ois.readObject());
+			return objects.toArray();
 		} finally {
 			fis.close();
 		}

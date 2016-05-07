@@ -12,6 +12,11 @@ public class StructuresDatabase implements Database {
 	public Map<String, Struct> structures;
 	public Map<String, Table> tables;
 	
+	public StructuresDatabase()
+	{
+		
+	}
+	
 	@Override
 	public Struct<Object> create(Structures struct, String name) {
 		return create(struct, name, new Object[0]);
@@ -22,11 +27,11 @@ public class StructuresDatabase implements Database {
 	{
 		switch (struct)
 		{
-		case LIST:	return new DBList<T>();
-		case STACK:	return new DBStack<T>();
-		case QUEUE:	return new DBQueue<T>();
-		case TREE:	return new DBTree<T>();
-		case SET:	return new DBSet<T>();
+		//case LIST:	return new DBList<T>();
+		//case STACK:	return new DBStack<T>();
+		//case QUEUE:	return new DBQueue<T>();
+		//case TREE:	return new DBTree<T>();
+		//case SET:	return new DBSet<T>();
 		
 		default:	throw new NullPointerException("$struct must not be null");
 		}
@@ -45,6 +50,12 @@ public class StructuresDatabase implements Database {
 
 	@Override
 	public <T> Struct<T> pull(String name, T[] type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Table pullTable(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
