@@ -7,8 +7,6 @@ public interface Struct<T> extends Modifiable {
 
 	public int size();
 	public boolean isEmpty();
-	public int indexOf(T data);
 	public void clear();
-	public T[] toArray();
 
 }
