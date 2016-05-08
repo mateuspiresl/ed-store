@@ -11,9 +11,9 @@ import java.util.List;
 
 public class FileHandler {
 
-	public static void write(String name, Object data) throws FileNotFoundException, IOException
+	public static void write(File file, Object data) throws FileNotFoundException, IOException
 	{
-		FileOutputStream fos = new FileOutputStream(name);
+		FileOutputStream fos = new FileOutputStream(file);
 		
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -27,10 +27,14 @@ public class FileHandler {
 			}
 		}
 	}
+
+	public static void write(String name, Object data) throws FileNotFoundException, IOException {
+		write(new File(name), data);
+	}
 	
-	public static Object read(String name) throws IOException, ClassNotFoundException
+	public static Object read(File file) throws IOException, ClassNotFoundException
 	{
-		FileInputStream fis = new FileInputStream(name);
+		FileInputStream fis = new FileInputStream(file);
 		
 		try {
 			ObjectInputStream ois = new ObjectInputStream(fis);
@@ -38,6 +42,10 @@ public class FileHandler {
 		} finally {
 			fis.close();
 		}
+	}
+
+	public static Object read(String name) throws IOException, ClassNotFoundException {
+		return read(new File(name));
 	}
 	
 	public static Object[] readAll(String name) throws IOException, ClassNotFoundException

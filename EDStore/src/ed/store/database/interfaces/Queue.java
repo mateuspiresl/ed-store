@@ -9,7 +9,7 @@ public interface Queue<T> extends Struct<T> {
 	/* Índice do primeiro elemento de valor data.
 	 * @param data - valor do elemento.
 	 * @return - altura. */
-	// public int indexOf(T data);
+	public int indexOf(T data);
 
 	/* Índice do primeiro elemento de valor data dentro da
 	 * 		quantidade limite.
@@ -19,7 +19,7 @@ public interface Queue<T> extends Struct<T> {
 
 	/* Array de todos os elementos da fila.
 	 * @return - array de elementos. */
-	// public T[] toArray();
+	/public T[] toArray();
 	
 	/* Array de n elementos da fila.
 	 * @param limit - número de elementos.

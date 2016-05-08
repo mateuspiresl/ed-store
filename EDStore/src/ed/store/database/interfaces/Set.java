@@ -6,6 +6,8 @@ public interface Set<T> extends Struct<T> {
 	public int insert(T data);
 	public int remove(T data);
 
+	public int indexOf(T data);
+
 	/* Array de todos os elementos da lista.
 	 * @return - array com todos os elementos. */
 	public T[] toArray();

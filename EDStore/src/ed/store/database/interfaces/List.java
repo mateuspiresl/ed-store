@@ -23,6 +23,8 @@ public interface List<T> extends Struct<T> {
 
 	public T get(int index);
 
+	public int indexOf(T data);
+
 	/* Índice do primeiro elemento de valor data dentro de
 	 *		um intervalo.
 	 * @param data - valor do elemento.
@@ -41,7 +43,7 @@ public interface List<T> extends Struct<T> {
 
 	/* Array de todos os elementos da lista.
 	 * @return - array com todos os elementos. */
-	// public T[] toArray();
+	public T[] toArray();
 	
 	/* Array de todos os elementos da lista dentro de um
 	 *		intervalo.

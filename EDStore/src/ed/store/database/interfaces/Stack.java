@@ -9,7 +9,7 @@ public interface Stack<T> extends Struct<T> {
 	/* Altura do primeiro elemento de valor data.
 	 * @param data - valor do elemento.
 	 * @return - altura. */
-	// public int indexOf(T data);
+	public int indexOf(T data);
 
 	/* Altura do primeiro elemento de valor data acima de
 	 *		uma altura mínima.
@@ -19,7 +19,7 @@ public interface Stack<T> extends Struct<T> {
 
 	/* Array de todos os elementos da pilha.
 	 * @return - array de elementos. */
-	// public T[] toArray();
+	public T[] toArray();
 
 	/* Array de n elementos da pilha.
 	 * @param limit - número de elementos.

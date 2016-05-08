@@ -16,7 +16,6 @@ public interface Database {
 
 	public void push();
 
-	public void clear(String name);
 	public void drop(String name);
 	public void dropAll();
 
