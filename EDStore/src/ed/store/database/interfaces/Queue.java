@@ -1,6 +1,6 @@
 package ed.store.database.interfaces;
 
-public interface Queue<T> extends Struct<T> {
+public interface Queue<T> extends Struct {
 
 	public T first();
 	public void enqueue(T data);
@@ -19,7 +19,7 @@ public interface Queue<T> extends Struct<T> {
 
 	/* Array de todos os elementos da fila.
 	 * @return - array de elementos. */
-	/public T[] toArray();
+	public T[] toArray();
 	
 	/* Array de n elementos da fila.
 	 * @param limit - número de elementos.

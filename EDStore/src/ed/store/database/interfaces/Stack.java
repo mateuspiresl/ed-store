@@ -1,6 +1,6 @@
 package ed.store.database.interfaces;
 
-public interface Stack<T> extends Struct<T> {
+public interface Stack<T> extends Struct {
 
 	public T top();
 	public void push(T data);

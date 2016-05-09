@@ -2,9 +2,7 @@ package ed.store.database.interfaces;
 
 import ed.store.database.KeyValuePair;
 
-public interface Table {
-
-	public boolean wasModified();
+public interface Table extends Struct {
 
 	public <T extends Comparable<Object>> void addColumn(String name);
 	public <T extends Comparable<T>> void addColumn(String name, T defaultValue);

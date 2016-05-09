@@ -1,10 +1,10 @@
 package ed.store.database.interfaces;
 
-public interface Set<T> extends Struct<T> {
+public interface Set<T> extends Struct {
 
-	public int has(T data);
-	public int insert(T data);
-	public int remove(T data);
+	public boolean has(T data);
+	public void insert(T data);
+	public void remove(T data);
 
 	public int indexOf(T data);
 

@@ -1,27 +1,18 @@
-package ed.store.database;
+package ed.store.database.structures;
 
 import ed.store.database.interfaces.List;
 import ed.store.database.interfaces.Struct;
 
 
-public class STree<T> implements Struct<T> {
+public class STree<T> implements Struct {
 
 	private static final long serialVersionUID = 1L;
 	
 	private TreeNode root;
 	private int size;
-	private boolean wasModified;
-	
-	
-	
 	
 	public TreeNode getRoot() {
 		return null;
-	}
-
-	@Override
-	public boolean wasModified() {
-		return this.wasModified;
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package ed.store.database.interfaces;
 
-public interface List<T> extends Struct<T> {
+public interface List<T> extends Struct {
 
 	public int add(T data);
 	public int insert(T data, int index);

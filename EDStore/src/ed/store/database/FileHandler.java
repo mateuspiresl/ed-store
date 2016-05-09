@@ -1,5 +1,6 @@
 package ed.store.database;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -9,8 +10,30 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import ed.store.database.exceptions.InvalidNameException;
+
 public class FileHandler {
 
+	public static File createFile(String name) throws InvalidNameException
+	{
+		File file = new File(name);
+
+		if (file.exists())
+			throw new InvalidNameException("A structure named " + name + " already exists");
+
+		return file;
+	}
+
+	public static File getFile(String name) throws InvalidNameException
+	{
+		File file = new File(name);
+
+		if ( ! file.exists())
+			throw new InvalidNameException("A structure named " + name + " doesn't exists");
+
+		return file;
+	}
+	
 	public static void write(File file, Object data) throws FileNotFoundException, IOException
 	{
 		FileOutputStream fos = new FileOutputStream(file);
