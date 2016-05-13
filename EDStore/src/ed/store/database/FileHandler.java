@@ -67,8 +67,8 @@ public class FileHandler {
 		}
 	}
 
-	public static Object read(String name) throws IOException, ClassNotFoundException {
-		return read(new File(name));
+	public static Object read(String name) throws IOException, ClassNotFoundException, InvalidNameException {
+		return read(FileHandler.getFile(name));
 	}
 	
 	public static Object[] readAll(String name) throws IOException, ClassNotFoundException
