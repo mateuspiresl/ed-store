@@ -1,16 +1,14 @@
 package ed.store.database;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import ed.store.database.exceptions.InvalidNameException;
 import ed.store.database.exceptions.CorruptedFileException;
 import ed.store.database.exceptions.InvalidFileException;
+import ed.store.database.exceptions.InvalidNameException;
 import ed.store.database.exceptions.NoPermissionException;
 import ed.store.database.interfaces.Database;
 import ed.store.database.interfaces.Map;
-import ed.store.database.interfaces.Set;
 import ed.store.database.structures.SMap;
 import ed.store.database.structures.serializables.PSSet;
 
@@ -31,15 +29,10 @@ public class StructuresDBMS {
 	private StructuresDBMS() throws NoPermissionException
 	{
 		this(new PSSet<String>());
-			
-		try {
-			FileHandler.write(FILENAME, this.databasesNames);
-		} catch (IOException ioe) {
-			throw new NoPermissionException(ioe);
-		}
+		FileHandler.write(FILENAME, this.databasesNames);
 	}
 	
-	private static String makePath(String name) {
+	public static String makePath(String name) {
 		return "db_" + name + ".sdb";
 	}
 	
@@ -114,7 +107,7 @@ public class StructuresDBMS {
 				existent.delete();
 				FileHandler.write(FileHandler.createFile(path), db);
 			}
-		} catch (IOException | InvalidNameException e) {
+		} catch (InvalidNameException e) {
 			// If wasn't possible to create the file or delete an existent
 			throw new NoPermissionException(e);
 		}
@@ -143,48 +136,56 @@ public class StructuresDBMS {
 		}
 	}
 
-	public void dropDatabase(String name) throws NoPermissionException, InvalidNameException
+	public void dropDatabase(String name) throws InvalidNameException
 	{
-		if ( ! this.databasesNames.has(name))
-			throw new InvalidNameException("It has no database named " + name);
-		
-		if (this.databases.hasKey(name))
-			this.databases.remove(name);
+		boolean exists =	this.databasesNames.remove(name) ||
+							this.databases.remove(name) != null;
 		
 		try {
-			File dbFile = FileHandler.getFile(name);
-			dbFile.delete();
-		} catch (InvalidNameException ine) {
-			ine.printStackTrace();
-		}
+			FileHandler.getFile(makePath(name)).delete();
+		} catch (InvalidNameException ine) { }
+		
+		if ( ! exists) throw new InvalidNameException("It has no database named " + name);
 	}
 
 	public void dropAll()
 	{
-		for (String name : this.databasesNames.toArray()) {
+		String[] names = this.databasesNames.toArray();
+		
+		for (String name : names) {
 			try {
 				dropDatabase(name);
-			} catch (NoPermissionException | InvalidNameException e) {
-				e.printStackTrace();
+			} catch (InvalidNameException ine) {
+				ine.printStackTrace();
 			}
 		}
 	}
 	
-	public void closeDatabase(String name)
+	public void closeDatabase(String name) throws InvalidNameException, NoPermissionException
 	{
 		if ( ! this.databasesNames.has(name))
 			throw new InvalidNameException("It has no database named " + name);
 		
 		Database db = this.databases.get(name);
-		if (db == null) return;
-		
-		db.close();
+		if (db != null)
+		{
+			db.push();
+			this.databases.remove(name);
+		}
 	}
 	
-	public void closeAll()
+	public void closeAll() throws NoPermissionException
 	{
 		for (String name : this.databases.getKeys())
-			closeDatabase(name);
+		{			
+			try {
+				closeDatabase(name);
+			} catch (InvalidNameException ine) {
+				try {
+					dropDatabase(name);
+				} catch (InvalidNameException ine2) { }
+			}
+		}
 	}
 	
 }

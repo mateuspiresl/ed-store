@@ -1,9 +1,19 @@
 package ed.store.database.structures;
 
+import java.io.Serializable;
+
 import ed.store.database.interfaces.Set;
 
-public class SSet<T> implements Set<String> {
+public class SSet<T> implements Set<String>, Serializable {
 
+	public SSet() {
+		// TODO
+	}
+	
+	public SSet(SSet<T> set) {
+		// TODO
+	}
+	
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub
@@ -19,7 +29,6 @@ public class SSet<T> implements Set<String> {
 	@Override
 	public void clear() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -29,15 +38,15 @@ public class SSet<T> implements Set<String> {
 	}
 
 	@Override
-	public void insert(String data) {
+	public boolean insert(String data) {
 		// TODO Auto-generated method stub
-
+		return false;
 	}
 
 	@Override
-	public void remove(String data) {
+	public boolean remove(String data) {
 		// TODO Auto-generated method stub
-
+		return false;
 	}
 
 	@Override

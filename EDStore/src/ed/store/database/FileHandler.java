@@ -2,7 +2,6 @@ package ed.store.database;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,16 +10,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ed.store.database.exceptions.InvalidNameException;
+import ed.store.database.exceptions.NoPermissionException;
 
 public class FileHandler {
 
-	public static File createFile(String name) throws InvalidNameException
+	public static File createFile(String name) throws InvalidNameException, NoPermissionException
 	{
 		File file = new File(name);
 
 		if (file.exists())
 			throw new InvalidNameException("A structure named " + name + " already exists");
 
+		try {
+			file.createNewFile();
+		} catch (IOException e) {
+			throw new NoPermissionException(e);
+		}
+		
 		return file;
 	}
 
@@ -34,25 +40,21 @@ public class FileHandler {
 		return file;
 	}
 	
-	public static void write(File file, Object data) throws FileNotFoundException, IOException
-	{
-		FileOutputStream fos = new FileOutputStream(file);
-		
+	public static void write(File file, Object data) throws NoPermissionException
+	{		
 		try {
+			FileOutputStream fos = new FileOutputStream(file);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(data);
 			oos.close();
-		} finally {
-			try {
-				fos.close();
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-			}
+			fos.close();
+		} catch (IOException e) {
+			throw new NoPermissionException(e);
 		}
 	}
 
-	public static void write(String name, Object data) throws FileNotFoundException, IOException {
-		write(new File(name), data);
+	public static void write(String path, Object data) throws NoPermissionException {
+		write(new File(path), data);
 	}
 	
 	public static Object read(File file) throws IOException, ClassNotFoundException

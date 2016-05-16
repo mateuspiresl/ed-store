@@ -3,8 +3,8 @@ package ed.store.database.interfaces;
 public interface Set<T> extends Struct {
 
 	public boolean has(T data);
-	public void insert(T data);
-	public void remove(T data);
+	public boolean insert(T data);
+	public boolean remove(T data);
 
 	public int indexOf(T data);
 

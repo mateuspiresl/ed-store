@@ -1,9 +1,19 @@
 package ed.store.database.structures;
 
+import java.io.Serializable;
+
 import ed.store.database.interfaces.Queue;
 
-public class SQueue<T> implements Queue<T> {
+public class SQueue<T> implements Queue<T>, Serializable {
 
+	public SQueue() {
+		// TODO
+	}
+	
+	public SQueue(SQueue<T> queue) {
+		// TODO
+	}
+	
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub

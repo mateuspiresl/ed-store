@@ -1,9 +1,11 @@
 package ed.store.database.structures.serializables;
 
+import java.io.Serializable;
+
 import ed.store.database.interfaces.Modifiable;
 import ed.store.database.structures.SQueue;
 
-public class PSQueue<T> extends SQueue<T>implements Modifiable {
+public class PSQueue<T extends Serializable> extends SQueue<T>implements Modifiable {
 
 	private transient boolean modifiedFlag = false;
 	
@@ -13,7 +15,7 @@ public class PSQueue<T> extends SQueue<T>implements Modifiable {
 	}
 
 	@Override
-	public void notifyModification() {
+	public void notifyChanges() {
 		this.modifiedFlag = true;
 	}
 

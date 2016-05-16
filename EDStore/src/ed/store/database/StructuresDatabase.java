@@ -7,6 +7,8 @@ import java.io.Serializable;
 
 import ed.store.database.enums.Structures;
 import ed.store.database.exceptions.InvalidNameException;
+import ed.store.database.exceptions.NoPermissionException;
+import ed.store.database.exceptions.UnknownTypeException;
 import ed.store.database.interfaces.Database;
 import ed.store.database.interfaces.Map;
 import ed.store.database.interfaces.Modifiable;
@@ -32,40 +34,68 @@ public class StructuresDatabase implements Database, Serializable {
 	}
 
 	private String makePath(String name) {
-		return "db_" + this.name + "_" + name;
+		return StructuresDBMS.makePath(this.name + "_" + name);
 	}
 	
-	@Override
-	public Struct create(Structures structType, String structName) throws InvalidNameException, FileNotFoundException, IOException {
-		return create(structType, structName, new Object[0]);
-	}
-
-	@Override
-	public <T> Struct create(Structures structType, String structName, T[] type) throws InvalidNameException, FileNotFoundException, IOException {
-		return create(structType, structName, type, new Object[0]);
+	private void create(Modifiable struct, String structName, File file) throws InvalidNameException, NoPermissionException
+	{
+		FileHandler.write(file, struct);
+		this.structuresNames.insert(structName);
+		this.structures.put(structName, struct);
 	}
 	
-	@Override
-	public <T, V> Struct create(Structures structType, String structName, T[] type, V[] type2) throws InvalidNameException, FileNotFoundException, IOException
+	public void create(Modifiable struct, String structName) throws InvalidNameException, NoPermissionException
 	{
 		File file = FileHandler.createFile(makePath(structName));
+		create(struct, structName, file);
+	}
+	
+	@Override
+	public Struct create(Structures structType, String structName) throws InvalidNameException, FileNotFoundException, IOException, NoPermissionException, UnknownTypeException
+	{
 		Modifiable struct;
+		
+		switch (structType)
+		{
+		case TABLE: struct = new PSTable(); break;
+		default:	throw new UnknownTypeException();
+		}
+		
+		create(struct, structName);
+		return (Struct) struct;
+	}
 
+	@Override
+	public <T extends Serializable> Struct create(Structures structType, String structName, T[] type) throws InvalidNameException, FileNotFoundException, IOException, NullPointerException, NoPermissionException, UnknownTypeException
+	{
+		Modifiable struct;
+		
 		switch (structType)
 		{
 		case LIST:	struct = new PSList<T>();	break;
 		case STACK:	struct = new PSStack<T>();	break;
 		case QUEUE:	struct = new PSQueue<T>();	break;
 		case TREE:	struct = new PSTree<T>();	break;
-		case SET:	struct = new PSSet<T>();	break;
-		case MAP:	struct = new PSMap<T, V>();	break;
-		case TABLE:	struct = new PSTable();		break;
-		default:	throw new NullPointerException("$struct must not be null");
+		case SET:	struct = new PSSet<T>();	break; 
+		default:	return create(structType, structName);
 		}
 		
-		FileHandler.write(file, struct);
-		this.structuresNames.insert(structName);
-		this.structures.put(structName, struct);
+		create(struct, structName);
+		return (Struct) struct;
+	}
+	
+	@Override
+	public <T extends Serializable, V extends Serializable> Struct create(Structures structType, String structName, T[] type, V[] type2) throws InvalidNameException, NullPointerException, NoPermissionException, FileNotFoundException, IOException, UnknownTypeException
+	{
+		Modifiable struct;
+		
+		switch (structType)
+		{
+		case MAP:	struct = new PSMap<T, V>();	break;
+		default:	return create(structType, structName, type);
+		}
+
+		create(struct, structName);
 		return (Struct) struct;
 	}
 
@@ -81,14 +111,26 @@ public class StructuresDatabase implements Database, Serializable {
 	}
 
 	@Override
-	public void push() throws FileNotFoundException, IOException
+	public synchronized void push() throws NoPermissionException
 	{
 		for (String name : this.structures.getKeys()) {
 			Modifiable struct = this.structures.get(name);
 
 			if (struct.wasModified())
 			{
-				FileHandler.write(makePath(name), struct);
+				File file = null;
+				try {
+					file = FileHandler.getFile(makePath(name));
+				} catch (InvalidNameException ine) {
+					try {
+						file = FileHandler.createFile(name);
+					} catch (InvalidNameException ine2) {
+						// The first InvalidNameException ensures the inexistence of
+						//		a file with same name, so the second will be never thrown 
+					}
+				}
+				
+				FileHandler.write(file, struct);
 				struct.notifySaving();
 			}
 		}

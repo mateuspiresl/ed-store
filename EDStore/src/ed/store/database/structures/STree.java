@@ -1,15 +1,23 @@
 package ed.store.database.structures;
 
+import java.io.Serializable;
+
 import ed.store.database.interfaces.List;
 import ed.store.database.interfaces.Struct;
 
 
-public class STree<T> implements Struct {
-
-	private static final long serialVersionUID = 1L;
+public class STree<T> implements Struct, Serializable {
 	
 	private TreeNode root;
 	private int size;
+	
+	public STree() {
+		// TODO
+	}
+	
+	public STree(STree<T> tree) {
+		// TODO
+	}
 	
 	public TreeNode getRoot() {
 		return null;

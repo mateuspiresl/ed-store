@@ -1,9 +1,19 @@
 package ed.store.database.structures;
 
+import java.io.Serializable;
+
 import ed.store.database.interfaces.Map;
 
-public class SMap<K, V> implements Map<K, V> {
+public class SMap<K, V> implements Map<K, V>, Serializable {
 
+	public SMap() {
+		// TODO
+	}
+	
+	public SMap(SMap<K, V> map) {
+		// TODO
+	}
+	
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub

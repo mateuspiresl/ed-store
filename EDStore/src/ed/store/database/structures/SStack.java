@@ -1,9 +1,19 @@
 package ed.store.database.structures;
 
+import java.io.Serializable;
+
 import ed.store.database.interfaces.Stack;
 
-public class SStack<T> implements Stack<T> {
+public class SStack<T> implements Stack<T>, Serializable {
 
+	public SStack() {
+		// TODO
+	}
+	
+	public SStack(SStack<T> stack) {
+		// TODO
+	}
+	
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub

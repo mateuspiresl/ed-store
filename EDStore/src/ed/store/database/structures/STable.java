@@ -1,12 +1,22 @@
 package ed.store.database.structures;
 
+import java.io.Serializable;
+
 import ed.store.database.KeyValuePair;
 import ed.store.database.interfaces.ColumnValidator;
 import ed.store.database.interfaces.Query;
 import ed.store.database.interfaces.Table;
 
-public class STable implements Table {
+public class STable implements Table, Serializable {
 
+	public STable(){
+		// TODO
+	}
+	
+	public STable(STable table){
+		// TODO
+	}
+	
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub

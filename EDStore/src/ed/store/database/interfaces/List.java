@@ -3,7 +3,11 @@ package ed.store.database.interfaces;
 public interface List<T> extends Struct {
 
 	public int add(T data);
-	public int insert(T data, int index);
+	public void addAll(T[] data);
+	public void addAll(List<? extends T> data);
+	public void insert(T data, int index);
+	public void insertAll(T[] data, int index);
+	public void insertAll(List<? extends T> data, int index);
 
 	public void set(int index, T data);
 	/* Modificar a primeira ocorrência de curr para data

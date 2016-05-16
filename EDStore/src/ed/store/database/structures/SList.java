@@ -1,9 +1,20 @@
 package ed.store.database.structures;
 
+import java.io.Serializable;
+
 import ed.store.database.interfaces.List;
+import ed.store.database.structures.serializables.PSList;
 
-public class SList<T> implements List<T> {
+public class SList<T> implements List<T>, Serializable {
 
+	public SList() {
+		// TODO		
+	}
+	
+	public SList(SList list) {
+		// TODO
+	}
+	
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub
@@ -29,9 +40,31 @@ public class SList<T> implements List<T> {
 	}
 
 	@Override
-	public int insert(T data, int index) {
+	public void addAll(T[] data) {
+		// TODO Auto-generated method stub	
+	}
+	
+	@Override
+	public void addAll(List<? extends T> data) {
 		// TODO Auto-generated method stub
-		return 0;
+		
+	}
+	
+	@Override
+	public void insert(T data, int index) {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void insertAll(T[] data, int index) {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void insertAll(List<? extends T> data, int index)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override

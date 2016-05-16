@@ -1,9 +1,11 @@
 package ed.store.database.structures.serializables;
 
+import java.io.Serializable;
+
 import ed.store.database.interfaces.Modifiable;
 import ed.store.database.structures.SSet;
 
-public class PSSet<T> extends SSet<T>implements Modifiable {
+public class PSSet<T extends Serializable> extends SSet<T> implements Modifiable {
 
 	private transient boolean modifiedFlag = false;
 	
@@ -13,7 +15,7 @@ public class PSSet<T> extends SSet<T>implements Modifiable {
 	}
 
 	@Override
-	public void notifyModification() {
+	public void notifyChanges() {
 		this.modifiedFlag = true;
 	}
 

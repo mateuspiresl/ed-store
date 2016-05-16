@@ -13,7 +13,7 @@ public class PSTable extends STable implements Modifiable {
 	}
 
 	@Override
-	public void notifyModification() {
+	public void notifyChanges() {
 		this.modifiedFlag = true;
 	}
 
