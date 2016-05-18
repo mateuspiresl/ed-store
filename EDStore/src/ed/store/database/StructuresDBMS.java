@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import ed.store.database.exceptions.CorruptedFileException;
+import ed.store.database.exceptions.DatabaseOverwriteException;
 import ed.store.database.exceptions.InvalidFileException;
 import ed.store.database.exceptions.InvalidNameException;
 import ed.store.database.exceptions.NoPermissionException;
@@ -14,7 +15,7 @@ import ed.store.database.structures.serializables.PSSet;
 
 public class StructuresDBMS {
 
-	private static final String FILENAME = "system.sdb";
+	private static final String FILENAME = "sdb/system.sdb";
 
 	private static StructuresDBMS instance;
 	private PSSet<String> databasesNames;
@@ -33,19 +34,29 @@ public class StructuresDBMS {
 	}
 	
 	public static String makePath(String name) {
-		return "db_" + name + ".sdb";
+		return "sdb/db_" + name + ".sdb";
 	}
 	
 	/* Cria um DBMS.
 	 * Se existir um, apaga o existente e cria um novo. */
-	public static StructuresDBMS create() throws NoPermissionException {
+	public static StructuresDBMS create() throws NoPermissionException, DatabaseOverwriteException
+	{
+		File dir = new File("sdb/");
+		if ( ! dir.exists()) dir.mkdirs();
+		
+		try {
+			FileHandler.getFile(FILENAME);
+		} catch (InvalidNameException ine) {
+			throw new DatabaseOverwriteException(ine);
+		}
+		
 		StructuresDBMS.instance = new StructuresDBMS();
 		return StructuresDBMS.instance;
 	}
 	
 	/* Abre um DBMS existente. */
 	@SuppressWarnings("unchecked")
-	public static StructuresDBMS open()
+	public static StructuresDBMS open() throws InvalidFileException
 	{
 		try
 		{
@@ -76,12 +87,12 @@ public class StructuresDBMS {
 	{
 		if (StructuresDBMS.has())
 		{
-			try {
-				File systemFile = FileHandler.getFile(FILENAME);
-				systemFile.delete();
-			} catch (InvalidNameException e) {
-				e.printStackTrace();
-			}
+			File dir = new File("sdb/");
+			
+			// Delete *.sdb
+			for (File file : dir.listFiles())
+				if (file.getName().endsWith(".sdb"))
+					file.delete();
 		
 			StructuresDBMS.instance = null;
 		}
