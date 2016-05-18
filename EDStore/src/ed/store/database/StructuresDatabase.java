@@ -20,7 +20,6 @@ import ed.store.database.structures.serializables.PSMap;
 import ed.store.database.structures.serializables.PSQueue;
 import ed.store.database.structures.serializables.PSSet;
 import ed.store.database.structures.serializables.PSStack;
-import ed.store.database.structures.serializables.PSTable;
 import ed.store.database.structures.serializables.PSTree;
 
 public class StructuresDatabase implements Database, Serializable {
@@ -49,24 +48,9 @@ public class StructuresDatabase implements Database, Serializable {
 		File file = FileHandler.createFile(makePath(structName));
 		create(struct, structName, file);
 	}
-	
-	@Override
-	public Struct create(Structures structType, String structName) throws InvalidNameException, FileNotFoundException, IOException, NoPermissionException, UnknownTypeException
-	{
-		Modifiable struct;
-		
-		switch (structType)
-		{
-		case TABLE: struct = new PSTable(); break;
-		default:	throw new UnknownTypeException();
-		}
-		
-		create(struct, structName);
-		return (Struct) struct;
-	}
 
 	@Override
-	public <T extends Serializable> Struct create(Structures structType, String structName, T[] type) throws InvalidNameException, FileNotFoundException, IOException, NullPointerException, NoPermissionException, UnknownTypeException
+	public <T extends Serializable> Struct create(Structures structType, String structName, T[] type) throws InvalidNameException, NoPermissionException, UnknownTypeException
 	{
 		Modifiable struct;
 		
@@ -77,7 +61,7 @@ public class StructuresDatabase implements Database, Serializable {
 		case QUEUE:	struct = new PSQueue<T>();	break;
 		case TREE:	struct = new PSTree<T>();	break;
 		case SET:	struct = new PSSet<T>();	break; 
-		default:	return create(structType, structName);
+		default:	throw new UnknownTypeException();
 		}
 		
 		create(struct, structName);
@@ -85,7 +69,7 @@ public class StructuresDatabase implements Database, Serializable {
 	}
 	
 	@Override
-	public <T extends Serializable, V extends Serializable> Struct create(Structures structType, String structName, T[] type, V[] type2) throws InvalidNameException, NullPointerException, NoPermissionException, FileNotFoundException, IOException, UnknownTypeException
+	public <T extends Serializable, V extends Serializable> Struct create(Structures structType, String structName, T[] type, V[] type2) throws InvalidNameException, NoPermissionException, UnknownTypeException
 	{
 		Modifiable struct;
 		
