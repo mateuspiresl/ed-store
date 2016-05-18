@@ -1,6 +1,6 @@
 package ed.store.database.exceptions;
 
-public class UnknownTypeException extends Exception {
+public class UnknownTypeException extends RuntimeException {
 
 	public UnknownTypeException() {
 		super();
