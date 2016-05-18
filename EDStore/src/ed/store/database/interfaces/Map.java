@@ -1,5 +1,7 @@
 package ed.store.database.interfaces;
 
+import ed.store.database.Entry;
+
 public interface Map<K, V> extends Struct {
 
 	public boolean hasKey(K key);
@@ -11,7 +13,8 @@ public interface Map<K, V> extends Struct {
 	public V get(K key);
 	public V remove(K key);
 	
-	public K[] getKeys();
-	public V[] getValues();
+	public List<K> getKeys();
+	public List<V> getValues();
+	public List<Entry<? extends K, ? extends V>> getEntries();
 
 }
