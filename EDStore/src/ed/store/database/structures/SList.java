@@ -166,10 +166,16 @@ public class SList<T> implements List<T>, Serializable {
 		@Override
 		public T next()
 		{
-			if (hasNext())
-				return this.list.get(this.index++);
-			else
-				throw new NoSuchElementException("There are no elements. List size is " + this.list.size());
+			T ret = null;
+			
+			do {
+				if ( ! hasNext())
+					throw new NoSuchElementException("There are no elements. List size is " + this.list.size());
+					
+				ret = this.list.get(this.index++);
+			} while (ret == null);
+			
+			return ret;
 		}
 
 		@Override
