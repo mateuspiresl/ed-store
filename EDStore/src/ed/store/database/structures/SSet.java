@@ -2,10 +2,17 @@ package ed.store.database.structures;
 
 import java.io.Serializable;
 
+import ed.store.database.Entry;
+import ed.store.database.interfaces.List;
 import ed.store.database.interfaces.Set;
 
 public class SSet<T> implements Set<String>, Serializable {
 
+	private static final int HASH_LIMIT = 1024;
+	
+	private List<Entry<K, V>>[] table = new SList[HASH_LIMIT];
+	private int size = 0;
+	
 	public SSet() {
 		// TODO
 	}
