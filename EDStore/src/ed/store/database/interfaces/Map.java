@@ -1,8 +1,11 @@
 package ed.store.database.interfaces;
 
-import ed.store.database.Entry;
+import java.io.Serializable;
 
-public interface Map<K, V> extends Struct {
+import ed.store.database.Entry;
+import ed.store.database.enums.Conditions;
+
+public interface Map<K extends Serializable, V extends Serializable> extends Struct {
 
 	public boolean hasKey(K key);
 	public boolean hasValue(V value);
@@ -14,7 +17,10 @@ public interface Map<K, V> extends Struct {
 	public V remove(K key);
 	
 	public List<K> getKeys();
+	public List<K> getKeys(Conditions condition, K rel);
 	public List<V> getValues();
-	public List<Entry<? extends K, ? extends V>> getEntries();
+	public List<V> getValues(Conditions condition, V rel);
+	public List<Entry<? extends K, ? extends V>> getEntries(); 
+	public List<Entry<? extends K, ? extends V>> getEntries(Conditions condition, K rel);
 
 }

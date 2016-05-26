@@ -3,11 +3,14 @@ package ed.store.database.structures;
 import java.io.Serializable;
 
 import ed.store.database.Entry;
+import ed.store.database.enums.Conditions;
 import ed.store.database.interfaces.List;
 import ed.store.database.interfaces.Map;
+import ed.store.database.structures.serializables.PSList;
 
 @SuppressWarnings("unchecked")
-public class SMap<K, V> implements Map<K, V>, Serializable {
+public class SMap<K extends Serializable & Comparable<? super K>, V extends Serializable & Comparable<? super V>>
+		implements Map<K, V>, Serializable {
 
 	private static final int HASH_LIMIT = 1024;
 	
@@ -125,8 +128,9 @@ public class SMap<K, V> implements Map<K, V>, Serializable {
 		List<K> keys = new SList<K>();
 		
 		for (List<Entry<K, V>> list : this.table)
-			for (Entry<K, V> entry : list)
-				keys.add(entry.key);
+			if (list != null)
+				for (Entry<K, V> entry : list)
+					keys.add(entry.key);
 		
 		return keys;
 	}
@@ -137,8 +141,9 @@ public class SMap<K, V> implements Map<K, V>, Serializable {
 		List<V> values = new SList<V>();
 		
 		for (List<Entry<K, V>> list : this.table)
-			for (Entry<K, V> entry : list)
-				values.add(entry.value);
+			if (list != null)
+				for (Entry<K, V> entry : list)
+					values.add(entry.value);
 		
 		return values;
 	}
@@ -150,6 +155,66 @@ public class SMap<K, V> implements Map<K, V>, Serializable {
 		
 		for (List<Entry<K, V>> list : this.table)
 			entries.addAll(list);
+		
+		return entries;
+	}
+
+	@Override
+	public List<K> getKeys(Conditions condition, K rel)
+	{
+		List<K> keys = new PSList<K>();
+	
+		if (condition == Conditions.EQUAL)
+		{
+			if (hasKey(rel))
+				keys.add(rel);
+		}
+		else
+		{
+			for (List<Entry<K, V>> list : this.table)
+				if (list != null)
+					for (Entry<K, V> entry : list)
+						if (condition.check(entry.key.compareTo(rel)))
+							keys.add(entry.key);
+		}
+		
+		return keys;
+	}
+
+	@Override
+	public List<V> getValues(Conditions condition, V rel)
+	{
+		List<V> values = new PSList<V>();
+		
+		for (List<Entry<K, V>> list : this.table)
+			if (list != null)
+				for (Entry<K, V> entry : list)
+					if (condition.check(entry.value.compareTo(rel)))
+						values.add(entry.value);
+		
+		return values;
+	}
+
+	@Override
+	public List<Entry<? extends K, ? extends V>> getEntries(Conditions condition, K rel)
+	{
+		List<Entry<? extends K, ? extends V>> entries = new PSList<Entry<? extends K, ? extends V>>();
+		
+		if (condition == Conditions.EQUAL)
+		{
+			V value = get(rel);
+			
+			if (value != null)
+				entries.add(new Entry<K, V>(rel, value));
+		}
+		else
+		{
+			for (List<Entry<K, V>> list : this.table)
+				if (list != null)
+					for (Entry<K, V> entry : list)
+						if (condition.check(entry.key.compareTo(rel)))
+							entries.add(new Entry<K, V>(entry.key, entry.value));
+		}
 		
 		return entries;
 	}
